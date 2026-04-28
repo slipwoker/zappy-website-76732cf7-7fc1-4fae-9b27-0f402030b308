@@ -215,18 +215,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ההזמנה התקבלה!">
     <meta name="twitter:description" content="תודה על ההזמנה">
-    <title data-i18n="order_success_page_title">ההזמנה התקבלה! - ארטאורי דיזיין</title>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <meta property="og:type" content="website">
+    <meta property="og:type" content="website">
   <meta property="og:locale" content="he_IL">
   
   
@@ -249,8 +238,6 @@
     <!-- Mickidum Accessibility Toolbar -->
     <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
 
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Iconify for cross-platform flag icons -->
     <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script><style id="zappy-multilang-css">
@@ -1383,6 +1370,10 @@ html[dir="rtl"] body {
 
 </style>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    
+
     <style id="zppb-promo-banner-styles">
     .zppb-overlay { display:none; position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.45); align-items: center; justify-content: center; }
     .zppb-overlay.zppb-visible { display:flex; }
@@ -1541,23 +1532,29 @@ html[dir="rtl"] body {
     // Preview pages are served by the Zappy server itself (localhost in dev), so use that base.
     // Deployed sites are static and must call the public Zappy API (never localhost).
     window.ZAPPY_API_BASE = (window.location.pathname.includes('/preview'))
-      ? "https://qaapi.zappy5.com"
+      ? "http://localhost:5001"
       : "https://qaapi.zappy5.com";
   </script>
   
     <div class="mobile-search-panel" id="mobile-search-panel">
       <div class="search-wrapper">
-        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off" data-i18n-placeholder="order_success_placeholder_42">
-        <button class="search-submit" id="mobile-search-submit" title="חיפוש" data-i18n-title="order_success_title_46">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         </button>
         <button class="close-search" id="close-mobile-search">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
       </div>
       <div class="search-results" id="mobile-search-results"></div>
     </div>
-  <nav class="navbar"> <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-i18n-aria-label="order_success_aria_label_51"> <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;"> <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> </button> <button class="phone-header-btn" aria-label="Call" data-phone="0546242000" data-i18n-aria-label="order_success_aria_label_52"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"> <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path> </svg> </button> <div class="nav-container"> <div class="nav-brand"> <a href="/" class="logo-link"> <img class="logo" data-placeholder="logo" data-context="business logo" width="160" height="40" src="/assets/logo-1773731144070-bweihw.webp?v=1773731144336-9e860u" alt="ארטאורי דיזיין" data-i18n-alt="order_success_alt_44"> </a> </div> <ul class="nav-menu" id="navMenu"> <li class="menu-item-has-children zappy-products-dropdown"> <a href="/products" data-i18n="order_success_nav_36"> מוצרים <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <path d="M6 9l6 6 6-6"></path> </svg> </a> <ul class="sub-menu" id="zappy-nav-category-links"> <li><a href="/products" data-i18n="order_success_nav_37">כל המוצרים</a></li> <!-- Categories will be loaded dynamically --> </ul> </li> <li><a href="/collections" data-i18n="order_success_nav_38">קולקציות</a></li><li><a href="/our-story" data-i18n="order_success_nav_39">הסיפור שלנו</a></li><li><a href="/contact" data-i18n="order_success_nav_40">צור קשר</a></li></ul>
+  <nav class="navbar"> <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-i18n-aria-label="home_aria_label_70"> <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;"> <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> </button> <button class="phone-header-btn" aria-label="Call" data-phone="0546242000" data-i18n-aria-label="home_aria_label_71"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"> <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path> </svg> </button> <div class="nav-container"> <div class="nav-brand"> <a href="/" class="logo-link"> <img class="logo" data-placeholder="logo" data-context="business logo" width="160" height="40" src="/assets/logo-1773731144070-bweihw.webp?v=1773731144336-9e860u" alt="ארטאורי דיזיין" data-i18n-alt="home_alt_53"> </a> </div> <ul class="nav-menu" id="navMenu"> <li class="menu-item-has-children zappy-products-dropdown"> <a href="/products" data-i18n="home_nav_45"> מוצרים <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <path d="M6 9l6 6 6-6"></path> </svg> </a> <ul class="sub-menu" id="zappy-nav-category-links"> <li><a href="/products" data-i18n="home_nav_46">כל המוצרים</a></li> <!-- Categories will be loaded dynamically --> </ul> </li> <li><a href="/collections" data-i18n="home_nav_47">קולקציות</a></li><li><a href="/our-story" data-i18n="home_nav_48">הסיפור שלנו</a></li><li><a href="/contact" data-i18n="home_nav_49">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="התחברות"><svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="עגלת קניות"><svg class="cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-count">0</span></a><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></div>
 
 <script data-no-icon-edit="true">(function(){function f(){var b=document.querySelector('.lang-switcher-current');if(!b)return;var n=b.closest('nav')||b.closest('header')||b.closest('.navbar');if(!n)return;var a=n.querySelector('.nav-menu a,.nav-links a');if(!a)a=n.querySelector('a:not(.lang-option):not(.lang-switcher-current):not([class*="logo"])');if(a){var c=getComputedStyle(a).color;if(c&&c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'){b.style.color=c;return;}}var s=getComputedStyle(n).backgroundColor;if(s&&s!=='rgba(0, 0, 0, 0)'&&s!=='transparent'){var m=s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);if(m){var l=(0.299*parseInt(m[1])+0.587*parseInt(m[2])+0.114*parseInt(m[3]))/255;b.style.color=l>0.5?'#1a1a1a':'#F3FAFF';}}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f);}else{setTimeout(f,0);}})()</script>
 <div class="lang-switcher" data-no-icon-edit="true" data-icon-color="#FFFFFF" style="position:relative;display:inline-flex;align-items:center;z-index:1000;margin:0 4px;">
@@ -1566,16 +1563,10 @@ html[dir="rtl"] body {
   </button>
   <div class="lang-switcher-dropdown" role="menu" style="position:absolute;top:100%;right:0;margin-top:4px;min-width:140px;background:white;border:1px solid rgba(128,128,128,0.2);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);opacity:0;visibility:hidden;transform:translateY(-8px);transition:all 0.2s ease;z-index:1001;"><button class="lang-option" data-lang="en">🇺🇸 English</button></div>
 </div>
-<script data-no-icon-edit="true">(function(){function f(){var b=document.querySelector('.lang-switcher-current');if(!b)return;var n=b.closest('nav')||b.closest('header')||b.closest('.navbar');if(!n)return;var a=n.querySelector('.nav-menu a,.nav-links a');if(!a)a=n.querySelector('a:not(.lang-option):not(.lang-switcher-current):not([class*="logo"])');if(a){var c=getComputedStyle(a).color;if(c&&c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'){b.style.color=c;return;}}var s=getComputedStyle(n).backgroundColor;if(s&&s!=='rgba(0, 0, 0, 0)'&&s!=='transparent'){var m=s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);if(m){var l=(0.299*parseInt(m[1])+0.587*parseInt(m[2])+0.114*parseInt(m[3]))/255;b.style.color=l>0.5?'#1a1a1a':'#F3FAFF';}}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f);}else{setTimeout(f,0);}})()</script><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="התחברות" data-i18n-title="order_success_title_47"><svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="עגלת קניות" data-i18n-title="order_success_title_48"><svg class="cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span class="cart-count">0</span></a><div class="nav-search-box">
-    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off" data-i18n-placeholder="order_success_placeholder_43">
-    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש" data-i18n-title="order_success_title_49">
-      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
-    </button>
-    <div class="nav-search-results" id="nav-search-results"></div>
-  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש" data-i18n-title="order_success_title_50"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></button></div> </div> </nav>
+<script data-no-icon-edit="true">(function(){function f(){var b=document.querySelector('.lang-switcher-current');if(!b)return;var n=b.closest('nav')||b.closest('header')||b.closest('.navbar');if(!n)return;var a=n.querySelector('.nav-menu a,.nav-links a');if(!a)a=n.querySelector('a:not(.lang-option):not(.lang-switcher-current):not([class*="logo"])');if(a){var c=getComputedStyle(a).color;if(c&&c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'){b.style.color=c;return;}}var s=getComputedStyle(n).backgroundColor;if(s&&s!=='rgba(0, 0, 0, 0)'&&s!=='transparent'){var m=s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);if(m){var l=(0.299*parseInt(m[1])+0.587*parseInt(m[2])+0.114*parseInt(m[3]))/255;b.style.color=l>0.5?'#1a1a1a':'#F3FAFF';}}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f);}else{setTimeout(f,0);}})()</script> </div> </nav>
 <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu">
       <div class="catalog-menu-container">
-        <a href="/products" class="catalog-menu-item catalog-menu-all" data-i18n="order_success_nav_41">כל המוצרים</a>
+        <a href="/products" class="catalog-menu-item catalog-menu-all" data-i18n="home_nav_50">כל המוצרים</a>
         <div class="catalog-menu-categories" id="zappy-category-links">
           <!-- Categories will be loaded dynamically -->
         </div>
@@ -1587,56 +1578,56 @@ html[dir="rtl"] body {
           <div class="order-success-container order-success-card">
             <div class="order-success-icon">
               <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
-                <circle cx="50" cy="50" r="48" fill="#10b981"></circle>
-                <path d="M30 50l15 15 25-30" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                <circle cx="50" cy="50" r="48" fill="#10b981"/>
+                <path d="M30 50l15 15 25-30" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               </svg>
             </div>
-            <h1 class="order-success-title" data-i18n="order_success_h1_1">תודה על ההזמנה <span class="order-number-inline" id="order-number-value">טוען פרטי הזמנה...</span></h1>
-            <p class="order-success-email" id="order-confirmation-email" data-i18n="order_success_p_7">אישור הזמנה נשלח לאימייל שלך</p>
+            <h1 class="order-success-title">תודה על ההזמנה <span class="order-number-inline" id="order-number-value">טוען פרטי הזמנה...</span></h1>
+            <p class="order-success-email" id="order-confirmation-email">אישור הזמנה נשלח לאימייל שלך</p>
             <div class="order-success-divider"></div>
             <div class="order-success-details">
               <div class="order-success-detail-block">
-                <div class="order-success-detail-label" data-i18n="order_success_div_31">תאריך עסקה</div>
+                <div class="order-success-detail-label">תאריך עסקה</div>
                 <div class="order-success-detail-value" id="order-date-value">-</div>
               </div>
               <div class="order-success-detail-block">
-                <div class="order-success-detail-label" data-i18n="order_success_div_32">אמצעי תשלום</div>
+                <div class="order-success-detail-label">אמצעי תשלום</div>
                 <div class="order-success-detail-value" id="order-payment-value">-</div>
               </div>
               <div class="order-success-detail-block">
-                <div class="order-success-detail-label" data-i18n="order_success_div_33">שיטת משלוח</div>
+                <div class="order-success-detail-label">שיטת משלוח</div>
                 <div class="order-success-detail-value" id="order-shipping-value">-</div>
               </div>
             </div>
             <div class="order-details-section" id="order-details-section" style="display: none;">
-              <h2 data-i18n="order_success_h2_2">פרטי ההזמנה</h2>
+              <h2>פרטי ההזמנה</h2>
               <div class="order-items-list" id="order-items-list"></div>
               <div class="order-totals-summary" id="order-totals-summary"></div>
             </div>
-            <a href="/" class="btn btn-primary continue-home-btn" data-i18n="order_success_link_14">המשך לדף הבית</a>
+            <a href="/" class="btn btn-primary continue-home-btn">המשך לדף הבית</a>
           </div>
         </section>
       
   </main>
-  <footer class="site-footer" style="color: #ffffff; background-color: #111111"> <div class="footer-container"> <div class="footer-top"> <div class="footer-column footer-about"> <a data-zappy-click-action="link" style="text-decoration: none; color: inherit; display: contents;" href="/" target="_blank" rel="noopener noreferrer"><div data-zappy-zoom-wrapper="true" data-element-id="img-1772726001431-yfotpk3c6" data-element-type="image" data-zappy-zoom-wrapper-width="148px" data-zappy-zoom-wrapper-height="37px" data-zappy-zoom-wrapper-width-mode="px" style="cursor: pointer; position: relative !important; overflow: hidden !important; width: 148px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 37px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true" data-zappy-click-action="link" class="zappy-resizable-hover"><img class="logo" data-placeholder="logo" data-context="business logo" width="150" height="40" src="/assets/business-general-service-upload-1773732402995.webp" alt="ארטאורי דיזיין" style="object-position: 50% 50%; display: block !important; object-fit: fill !important; margin: 0px !important; left: 0% !important; top: -31.5267% !important; width: 100% !important; height: 163.053% !important; max-width: none !important; max-height: none !important; filter: none !important;" data-element-id="img-1772726001431-yfotpk3c6" data-element-type="image" data-zappy-zoom="0.8" data-zappy-click-action="link" data-zappy-base64-stripped="true" data-zappy-original-width="160" data-zappy-original-height="40" data-i18n-alt="order_success_alt_45"></div></a> <p class="footer-description"  data-i18n="order_success_p_8">פריטי עיצוב הבית ומתנות עם אופי שמכניסים חום, ענין והומור לכל חלל מגורים</p> </div> <div class="footer-column footer-links"> <h3 class="footer-title" data-i18n="order_success_h3_4">קישורים מהירים</h3> <ul class="footer-menu"> <li data-i18n="order_success_li_26"><a href="/collections"  data-i18n="order_success_link_15">קולקציות</a></li> <li data-i18n="order_success_li_27"><a href="/our-story"  data-i18n="order_success_link_16">הסיפור שלנו</a></li> <li data-i18n="order_success_li_28"><a href="/contact" data-i18n="order_success_link_17">צור קשר</a></li> </ul> </div> <div class="footer-column footer-contact"> <h3 class="footer-title" data-i18n="order_success_h3_5">יצירת קשר</h3> <ul class="contact-list"> <li data-i18n="order_success_li_29"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1772725825900-zex5gwyxu" data-icon-type="fontawesome" style="cursor: pointer;"></i> <a href="mailto:info@artoridesign.com" data-i18n="order_success_link_18">info@artoridesign.com</a></li> <li><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1772725825900-xkiap5ndg" data-icon-type="fontawesome"></i> <a href="tel:0546242000">054-6242000</a></li> <li data-i18n="order_success_li_30"><a href="/" data-i18n="order_success_link_19"><i class="fas fa-map-marker-alt" style="cursor: pointer;"></i> <span>הרדוף 19, הוד השרון, 4502117, ישראל</span></a></li> </ul> </div> <div class="footer-column footer-social"> <h3 class="footer-title" data-i18n="order_success_h3_6">עקבו אחרינו</h3> <div class="social-links"> <a href="https://facebook.com/artoridesignisrael" aria-label="Facebook" data-i18n-aria-label="order_success_aria_label_53"><i class="fab fa-facebook-f"></i></a> <a href="https://instagram.com/artori_design" aria-label="Instagram" data-i18n-aria-label="order_success_aria_label_54"><i class="fab fa-instagram" data-element-type="icon" data-element-id="icon-1772725825900-f47h23ocb" data-icon-type="fontawesome"></i></a> <a href="https://wa.me/972546242000" aria-label="WhatsApp" data-i18n-aria-label="order_success_aria_label_55"><i class="fab fa-whatsapp" data-element-type="icon" data-element-id="icon-1772725825901-fgi7v2oia" data-icon-type="fontawesome"></i></a> <a href="https://youtube.com/@artoridesign7504" aria-label="YouTube" data-element-id="element-ai-1774346845267-yt9k2m" data-element-type="social-link" data-i18n-aria-label="order_success_aria_label_56"><i class="fab fa-youtube" data-element-type="icon" data-element-id="icon-1774369410098-rthcbposj" data-icon-type="fontawesome"></i></a> <a href="https://tiktok.com/@artori_design" aria-label="TikTok" data-element-id="element-ai-1774346845267-tk3p8x" data-element-type="social-link" data-i18n-aria-label="order_success_aria_label_57"><i class="fab fa-tiktok" data-element-type="icon" data-element-id="icon-1774369410098-2e4mgogdz" data-icon-type="fontawesome"></i></a> <a href="https://pinterest.com/artoridesign" aria-label="Pinterest" data-element-id="element-ai-1774346845267-pn5r1q" data-element-type="social-link" data-i18n-aria-label="order_success_aria_label_58"><i class="fab fa-pinterest-p" data-element-type="icon" data-element-id="icon-1774369410098-m7zg2pgl1" data-icon-type="fontawesome"></i></a> </div> </div> </div> <div class="footer-bottom"> <div class="footer-bottom-content"> <div class="copyright"> <p data-i18n="order_success_p_9">© 2026 ארטאורי דיזיין. כל הזכויות שמורות.</p> </div> <div class="footer-legal"> <a href="/privacy" data-i18n="order_success_link_20">מדיניות פרטיות</a> <span class="separator">|</span> <a href="/terms" data-i18n="order_success_link_21">תנאי שימוש</a><span class="separator">|</span> <a href="/return-policy" aria-label="מדיניות החזרות" data-i18n="order_success_link_22" data-i18n-aria-label="order_success_aria_label_59"> מדיניות החזרות </a> <span class="separator">|</span> <a href="/accessibility" data-i18n="order_success_link_23">נגישות</a> <span class="separator">|</span> <a href="https://zappy5.com" target="_blank" class="zappy-attribution" data-i18n="order_success_link_24">נוצר באמצעות Zappy</a> </div> </div> </div> </div> </footer>
+  <footer class="site-footer" style="color: #ffffff; background-color: #111111"> <div class="footer-container"> <div class="footer-top"> <div class="footer-column footer-about"> <a data-zappy-click-action="link" style="text-decoration: none; color: inherit; display: contents;" href="/" target="_blank" rel="noopener noreferrer"><div data-zappy-zoom-wrapper="true" data-element-id="img-1772726001431-yfotpk3c6" data-element-type="image" data-zappy-zoom-wrapper-width="148px" data-zappy-zoom-wrapper-height="37px" data-zappy-zoom-wrapper-width-mode="px" style="cursor: pointer; position: relative !important; overflow: hidden !important; width: 148px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 37px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true" data-zappy-click-action="link" class="zappy-resizable-hover"><img class="logo" data-placeholder="logo" data-context="business logo" width="150" height="40" src="/assets/business-general-service-upload-1773732402995.webp" alt="ארטאורי דיזיין" style="object-position: 50% 50%; display: block !important; object-fit: fill !important; margin: 0px !important; left: 0% !important; top: -31.5267% !important; width: 100% !important; height: 163.053% !important; max-width: none !important; max-height: none !important; filter: none !important;" data-element-id="img-1772726001431-yfotpk3c6" data-element-type="image" data-zappy-zoom="0.8" data-zappy-click-action="link" data-zappy-base64-stripped="true" data-zappy-original-width="160" data-zappy-original-height="40" data-i18n-alt="home_alt_64"></div></a> <p class="footer-description"  data-i18n="home_p_20">פריטי עיצוב הבית ומתנות עם אופי שמכניסים חום, ענין והומור לכל חלל מגורים</p> </div> <div class="footer-column footer-links"> <h3 class="footer-title" data-i18n="home_h3_14">קישורים מהירים</h3> <ul class="footer-menu"> <li data-i18n="home_li_37"><a href="/collections"  data-i18n="home_link_27">קולקציות</a></li> <li data-i18n="home_li_38"><a href="/our-story"  data-i18n="home_link_28">הסיפור שלנו</a></li> <li data-i18n="home_li_39"><a href="/contact" data-i18n="home_link_29">צור קשר</a></li> </ul> </div> <div class="footer-column footer-contact"> <h3 class="footer-title" data-i18n="home_h3_15">יצירת קשר</h3> <ul class="contact-list"> <li data-i18n="home_li_40"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1772725825900-zex5gwyxu" data-icon-type="fontawesome" style="cursor: pointer;"></i> <a href="mailto:info@artoridesign.com" data-i18n="home_link_30">info@artoridesign.com</a></li> <li><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1772725825900-xkiap5ndg" data-icon-type="fontawesome"></i> <a href="tel:0546242000">054-6242000</a></li> <li data-i18n="home_li_41"><a href="/" data-i18n="home_link_31"><i class="fas fa-map-marker-alt" style="cursor: pointer;"></i> <span>הרדוף 19, הוד השרון, 4502117, ישראל</span></a></li> </ul> </div> <div class="footer-column footer-social"> <h3 class="footer-title" data-i18n="home_h3_16">עקבו אחרינו</h3> <div class="social-links"> <a href="https://facebook.com/artoridesignisrael" aria-label="Facebook" data-i18n-aria-label="home_aria_label_72"><i class="fab fa-facebook-f"></i></a> <a href="https://instagram.com/artori_design" aria-label="Instagram" data-i18n-aria-label="home_aria_label_73"><i class="fab fa-instagram" data-element-type="icon" data-element-id="icon-1772725825900-f47h23ocb" data-icon-type="fontawesome"></i></a> <a href="https://wa.me/972546242000" aria-label="WhatsApp" data-i18n-aria-label="home_aria_label_74"><i class="fab fa-whatsapp" data-element-type="icon" data-element-id="icon-1772725825901-fgi7v2oia" data-icon-type="fontawesome"></i></a> <a href="https://youtube.com/@artoridesign7504" aria-label="YouTube" data-element-id="element-ai-1774346845267-yt9k2m" data-element-type="social-link" data-i18n-aria-label="home_aria_label_75"><i class="fab fa-youtube" data-element-type="icon" data-element-id="icon-1774369410098-rthcbposj" data-icon-type="fontawesome"></i></a> <a href="https://tiktok.com/@artori_design" aria-label="TikTok" data-element-id="element-ai-1774346845267-tk3p8x" data-element-type="social-link" data-i18n-aria-label="home_aria_label_76"><i class="fab fa-tiktok" data-element-type="icon" data-element-id="icon-1774369410098-2e4mgogdz" data-icon-type="fontawesome"></i></a> <a href="https://pinterest.com/artoridesign" aria-label="Pinterest" data-element-id="element-ai-1774346845267-pn5r1q" data-element-type="social-link" data-i18n-aria-label="home_aria_label_77"><i class="fab fa-pinterest-p" data-element-type="icon" data-element-id="icon-1774369410098-m7zg2pgl1" data-icon-type="fontawesome"></i></a> </div> </div> </div> <div class="footer-bottom"> <div class="footer-bottom-content"> <div class="copyright"> <p data-i18n="home_p_21">© 2026 ארטאורי דיזיין. כל הזכויות שמורות.</p> </div> <div class="footer-legal"> <a href="/privacy" data-i18n="home_link_32">מדיניות פרטיות</a> <span class="separator">|</span> <a href="/terms" data-i18n="home_link_33">תנאי שימוש</a><span class="separator">|</span> <a href="/return-policy" aria-label="מדיניות החזרות" data-i18n="home_link_34" data-i18n-aria-label="home_aria_label_78"> מדיניות החזרות </a> <span class="separator">|</span> <a href="/accessibility" data-i18n="home_link_35">נגישות</a> <span class="separator">|</span> <a href="https://zappy5.com" target="_blank" class="zappy-attribution" data-i18n="home_link_36">נוצר באמצעות Zappy</a> </div> </div> </div> </div> </footer>
   
 <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
 <aside class="cart-drawer rtl" id="cart-drawer" dir="rtl">
   <div class="cart-drawer-header">
-    <h2 data-i18n="order_success_h2_3">עגלת הקניות שלך</h2>
-    <button type="button" class="cart-drawer-close" id="cart-drawer-close" aria-label="סגור" data-i18n-aria-label="order_success_aria_label_60">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+    <h2>עגלת הקניות שלך</h2>
+    <button type="button" class="cart-drawer-close" id="cart-drawer-close" aria-label="סגור">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
   <div class="cart-drawer-body" id="cart-drawer-items">
-    <div class="empty-cart" data-i18n="order_success_div_34">העגלה ריקה</div>
+    <div class="empty-cart">העגלה ריקה</div>
   </div>
   <div class="cart-drawer-footer">
-    <div class="cart-drawer-total" data-i18n="order_success_div_35">
+    <div class="cart-drawer-total">
       <span>סה"כ:</span>
       <span id="cart-drawer-total">₪0</span>
     </div>
-    <a href="/checkout" class="cart-drawer-checkout" data-i18n="order_success_link_25">המשך לתשלום</a>
+    <a href="/checkout" class="cart-drawer-checkout">המשך לתשלום</a>
   </div>
 </aside>
   <script>
@@ -1719,9 +1710,90 @@ html[dir="rtl"] body {
   })();
   </script>
 
+    
 
 
+    <div class="zppb-overlay" id="zppb-overlay">
+      <div class="zppb-banner">
+        <button class="zppb-close" id="zppb-close">&times;</button>
+        
+        <div class="zppb-content">
+          <h3 class="zppb-h">כיף שבאת! קבל/י 10% על ההזמנה הראשונה</h3>
+          <p class="zppb-sub"></p>
+          
+          
+          <a href="/" class="zppb-cta">קנה עכשיו</a>
+        </div>
+      </div>
+    </div>
+<script>
+    (function(){
+      var FREQ = 'once';
+      var DELAY = 2000;
+      var KEY = 'zppb_6ee47e8a-fcc0-432f-887a-bec654ac2aac';
+      // Only run on the first URL opened in this tab. Avoids showing the modal again
+      // on every internal navigation when the user leaves before the delay fired on the landing page.
+      if (FREQ !== 'every_visit') {
+        try {
+          var entKey = KEY + '_sess_entry';
+          var curPath = window.location.pathname + window.location.search;
+          var entryPath = sessionStorage.getItem(entKey);
+          if (!entryPath) {
+            sessionStorage.setItem(entKey, curPath);
+            entryPath = curPath;
+          }
+          if (curPath !== entryPath) {
+            return;
+          }
+        } catch (e) {}
+      }
 
+      function shouldShow() {
+        if (document.body && document.body.classList.contains('zappy-edit-mode')) return false;
+        if (FREQ === 'every_visit') return true;
+        if (FREQ === 'once') return !localStorage.getItem(KEY);
+        if (FREQ === 'once_per_session') return !sessionStorage.getItem(KEY);
+        if (FREQ === 'once_per_day') {
+          var last = localStorage.getItem(KEY);
+          if (!last) return true;
+          return (Date.now() - parseInt(last, 10)) > 86400000;
+        }
+        return false;
+      }
+
+      function markShown() {
+        try {
+          if (FREQ === 'once') localStorage.setItem(KEY, '1');
+          else if (FREQ === 'once_per_session') sessionStorage.setItem(KEY, '1');
+          else if (FREQ === 'once_per_day') localStorage.setItem(KEY, String(Date.now()));
+        } catch(e){}
+      }
+
+      function closeBanner() {
+        var ov = document.getElementById('zppb-overlay');
+        if (ov) { ov.classList.remove('zppb-visible'); }
+      }
+
+      function showBanner() {
+        if (!shouldShow()) return;
+        var ov = document.getElementById('zppb-overlay');
+        if (ov) { ov.classList.add('zppb-visible'); markShown(); }
+      }
+
+      
+
+      
+
+      var closeBtn = document.getElementById('zppb-close');
+      if (closeBtn) closeBtn.addEventListener('click', closeBanner);
+      var overlay = document.getElementById('zppb-overlay');
+      if (overlay) overlay.addEventListener('click', function(e) { if (e.target === overlay) closeBanner(); });
+
+      setTimeout(function() {
+        showBanner();
+        
+      }, DELAY);
+    })();</script>
 
 <!-- i18next Multi-Language Support -->
 <script>
@@ -1738,6 +1810,7 @@ html[dir="rtl"] body {
       "ecom_sale": "מבצעים",
       "ecom_total": "סה\"כ",
       "ecom_subtotal": "סכום ביניים",
+      "ecom_yourCart": "העגלה שלך",
       "ecom_emptyCart": "העגלה ריקה",
       "ecom_checkout": "תשלום",
       "ecom_remove": "הסר",
@@ -3202,6 +3275,7 @@ html[dir="rtl"] body {
       "ecom_sale": "Sale",
       "ecom_total": "Total",
       "ecom_subtotal": "Subtotal",
+      "ecom_yourCart": "Your Cart",
       "ecom_emptyCart": "Your cart is empty",
       "ecom_checkout": "Checkout",
       "ecom_remove": "Remove",
@@ -5644,88 +5718,6 @@ html[dir="rtl"] body {
   }
 })();
 </script>
-
-    <div class="zppb-overlay" id="zppb-overlay">
-      <div class="zppb-banner">
-        <button class="zppb-close" id="zppb-close">&times;</button>
-        
-        <div class="zppb-content">
-          <h3 class="zppb-h">כיף שבאת! קבל/י 10% על ההזמנה הראשונה</h3>
-          <p class="zppb-sub"></p>
-          
-          
-          <a href="/" class="zppb-cta">קנה עכשיו</a>
-        </div>
-      </div>
-    </div>
-<script>
-    (function(){
-      var FREQ = 'once';
-      var DELAY = 2000;
-      var KEY = 'zppb_6ee47e8a-fcc0-432f-887a-bec654ac2aac';
-      // Only run on the first URL opened in this tab. Avoids showing the modal again
-      // on every internal navigation when the user leaves before the delay fired on the landing page.
-      if (FREQ !== 'every_visit') {
-        try {
-          var entKey = KEY + '_sess_entry';
-          var curPath = window.location.pathname + window.location.search;
-          var entryPath = sessionStorage.getItem(entKey);
-          if (!entryPath) {
-            sessionStorage.setItem(entKey, curPath);
-            entryPath = curPath;
-          }
-          if (curPath !== entryPath) {
-            return;
-          }
-        } catch (e) {}
-      }
-
-      function shouldShow() {
-        if (document.body && document.body.classList.contains('zappy-edit-mode')) return false;
-        if (FREQ === 'every_visit') return true;
-        if (FREQ === 'once') return !localStorage.getItem(KEY);
-        if (FREQ === 'once_per_session') return !sessionStorage.getItem(KEY);
-        if (FREQ === 'once_per_day') {
-          var last = localStorage.getItem(KEY);
-          if (!last) return true;
-          return (Date.now() - parseInt(last, 10)) > 86400000;
-        }
-        return false;
-      }
-
-      function markShown() {
-        try {
-          if (FREQ === 'once') localStorage.setItem(KEY, '1');
-          else if (FREQ === 'once_per_session') sessionStorage.setItem(KEY, '1');
-          else if (FREQ === 'once_per_day') localStorage.setItem(KEY, String(Date.now()));
-        } catch(e){}
-      }
-
-      function closeBanner() {
-        var ov = document.getElementById('zppb-overlay');
-        if (ov) { ov.classList.remove('zppb-visible'); }
-      }
-
-      function showBanner() {
-        if (!shouldShow()) return;
-        var ov = document.getElementById('zppb-overlay');
-        if (ov) { ov.classList.add('zppb-visible'); markShown(); }
-      }
-
-      
-
-      
-
-      var closeBtn = document.getElementById('zppb-close');
-      if (closeBtn) closeBtn.addEventListener('click', closeBanner);
-      var overlay = document.getElementById('zppb-overlay');
-      if (overlay) overlay.addEventListener('click', function(e) { if (e.target === overlay) closeBanner(); });
-
-      setTimeout(function() {
-        showBanner();
-        
-      }, DELAY);
-    })();</script>
 
     <script src="/script.js"></script>
 
