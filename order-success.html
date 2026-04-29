@@ -3879,31 +3879,6 @@ html[dir="rtl"] body {
       @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
     </style>
 
-    <style id="mobile-lang-menu-deployed-css">
-    @media (max-width: 768px) {
-      .lang-switcher,
-      .nav-cta-container .lang-switcher,
-      .nav-container .lang-switcher,
-      .navbar .lang-switcher,
-      .navbar .nav-cta-container .lang-switcher,
-      .nav-icons-left .lang-switcher,
-      .nav-ecommerce-icons .lang-switcher { display: none !important; }
-      .mobile-lang-menu { width: 100%; border-top: 1px solid rgba(128,128,128,0.2); padding: 8px 0 0 0; margin-top: 8px; }
-      .mobile-lang-toggle { display: flex !important; align-items: center; justify-content: space-between; width: 100%; padding: 12px 16px; background: none; border: none; cursor: pointer; font-size: 15px; color: inherit; font-family: inherit; }
-      .mobile-lang-toggle::after { content: ''; display: inline-block; width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.3s ease; margin-left: 8px; }
-      .mobile-lang-toggle.expanded::after { transform: rotate(-135deg); }
-      .mobile-lang-options { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-      .mobile-lang-options.expanded { max-height: 300px; }
-      .mobile-lang-option { display: flex !important; align-items: center; gap: 10px; padding: 10px 24px; text-decoration: none; color: inherit; font-size: 14px; font-family: inherit; }
-      .mobile-lang-option:hover { background: rgba(128,128,128,0.1); }
-      .mobile-lang-option.active { font-weight: 600; opacity: 0.7; pointer-events: none; }
-      .mobile-lang-option img { width: 20px; height: 20px; border-radius: 50%; }
-    }
-    @media (min-width: 769px) {
-      .mobile-lang-menu { display: none !important; }
-    }
-    </style>
-
     <style id="zappy-widget-visibility">
       #mic-access-tool-general-button, .mic-access-tool-general-button,
       #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
@@ -7147,7 +7122,37 @@ html[dir="rtl"] body {
     if (stored && availableLanguages.includes(stored)) return stored;
     return 'he';
   }
-  
+
+  // Build the URL for a target language and navigate. The URL pattern mirrors
+  // exactly what generateUrlBasedLanguageSwitcher writes into <a href> values:
+  //   default lang  → no prefix       (e.g. /products/foo)
+  //   non-default   → /<lang>/...      (e.g. /en/products/foo)
+  // We strip whatever language prefix is currently in the URL before applying
+  // the new one so transitions like /he/x → /en/x and /en/x → / both work.
+  // Navigating (instead of an in-page changeLanguage swap) is critical because
+  // server-rendered chrome (navbar links, announcement bar, footer, hero copy,
+  // etc.) is baked per-language at publish time and has no [data-i18n] hooks
+  // to update at runtime; only a real navigation surfaces the right version.
+  // It also makes refresh idempotent — the URL is the source of truth, so the
+  // page reloads in the same language the user just picked.
+  function navigateToLanguage(targetLang) {
+    if (!targetLang || !availableLanguages.includes(targetLang)) return;
+    if (targetLang === zappyI18n.language) return;
+    try { localStorage.setItem('zappy_lang', targetLang); } catch (e) {}
+
+    var path = window.location.pathname || '/';
+    var prefixMatch = path.match(/^\/([a-z]{2})(?=\/|$)/i);
+    if (prefixMatch && availableLanguages.includes(prefixMatch[1].toLowerCase())) {
+      path = path.slice(prefixMatch[0].length) || '/';
+    }
+
+    var newPath = (targetLang === 'he')
+      ? path
+      : ('/' + targetLang + (path === '/' ? '' : path));
+
+    window.location.assign(newPath + (window.location.search || '') + (window.location.hash || ''));
+  }
+
   // Callbacks for language change events (e.g., e-commerce content refresh)
   const languageChangeCallbacks = [];
   
@@ -7620,13 +7625,29 @@ html[dir="rtl"] body {
         })
         .join('');
       
-      // Re-attach event listeners
+      // Re-attach event listeners. Anchors with a real href (the URL-based
+      // switcher renders <a href="/en/...">) MUST navigate; preventDefault'ing
+      // them and calling changeLanguage(null) — which is what the previous
+      // implementation did, since lang-option anchors do not carry data-lang —
+      // silently swallowed the click and left the navbar / announcement bar /
+      // hero copy stuck in the previous language. Buttons with data-lang fall
+      // through to navigateToLanguage so the page reloads under the correct
+      // /<lang>/... URL and the next refresh stays on that language.
       dropdown.querySelectorAll('.lang-option').forEach(function(option) {
         option.addEventListener('click', function(e) {
+          var langAttr = this.getAttribute('data-lang');
+          var hrefAttr = this.getAttribute('href');
+          if (this.tagName === 'A' && hrefAttr && hrefAttr !== '#') {
+            e.stopPropagation();
+            try { if (langAttr) localStorage.setItem('zappy_lang', langAttr); } catch (_) {}
+            dropdown.style.opacity = '0';
+            dropdown.style.visibility = 'hidden';
+            dropdown.style.transform = 'translateY(-8px)';
+            return;
+          }
           e.preventDefault();
           e.stopPropagation();
-          const lang = this.getAttribute('data-lang');
-          zappyI18n.changeLanguage(lang);
+          if (langAttr) navigateToLanguage(langAttr);
           dropdown.style.opacity = '0';
           dropdown.style.visibility = 'hidden';
           dropdown.style.transform = 'translateY(-8px)';
@@ -7698,13 +7719,24 @@ html[dir="rtl"] body {
         }
       });
       
-      // Handle language selection
+      // Handle language selection. See the equivalent block in
+      // updateLanguageSwitcherOptions for why anchors must keep their default
+      // navigation and buttons must route through navigateToLanguage.
       dropdown.querySelectorAll('.lang-option').forEach(function(option) {
         option.addEventListener('click', function(e) {
+          var langAttr = this.getAttribute('data-lang');
+          var hrefAttr = this.getAttribute('href');
+          if (this.tagName === 'A' && hrefAttr && hrefAttr !== '#') {
+            e.stopPropagation();
+            try { if (langAttr) localStorage.setItem('zappy_lang', langAttr); } catch (_) {}
+            dropdown.style.opacity = '0';
+            dropdown.style.visibility = 'hidden';
+            dropdown.style.transform = 'translateY(-8px)';
+            return;
+          }
           e.preventDefault();
           e.stopPropagation();
-          const lang = this.getAttribute('data-lang');
-          zappyI18n.changeLanguage(lang);
+          if (langAttr) navigateToLanguage(langAttr);
           dropdown.style.opacity = '0';
           dropdown.style.visibility = 'hidden';
           dropdown.style.transform = 'translateY(-8px)';
@@ -7837,18 +7869,12 @@ html[dir="rtl"] body {
         e.preventDefault();
         e.stopPropagation();
         var lang = this.getAttribute('data-lang');
-        zappyI18n.changeLanguage(lang);
-        optionsEl.classList.remove('open');
-        optionsEl.style.display = 'none';
-        var chevron = newToggle.querySelector('.mobile-lang-chevron');
-        if (chevron) chevron.style.transform = '';
-        var navMenu = document.getElementById('navMenu') || document.querySelector('.nav-menu');
-        if (navMenu) navMenu.classList.remove('active');
-        var hamburgerIcon = document.querySelector('.hamburger-icon');
-        var closeIcon = document.querySelector('.close-icon');
-        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
-        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
-        document.body.style.overflow = '';
+        // Navigate to /<lang>/... so server-baked chrome (navbar, hero,
+        // announcement bar, footer) renders in the chosen language. An in-page
+        // changeLanguage swap would only refresh [data-i18n] elements and the
+        // user would still see the old navbar; refreshing would also revert
+        // because the URL still encoded the previous language.
+        if (lang) navigateToLanguage(lang);
       });
     });
   }
@@ -7885,18 +7911,10 @@ html[dir="rtl"] body {
         e.preventDefault();
         e.stopPropagation();
         var lang = this.getAttribute('data-lang');
-        zappyI18n.changeLanguage(lang);
-        optionsContainer.classList.remove('open');
-        optionsContainer.style.display = 'none';
-        var chevron = menuItem.querySelector('.mobile-lang-chevron');
-        if (chevron) chevron.style.transform = '';
-        var navMenu = document.getElementById('navMenu') || document.querySelector('.nav-menu');
-        if (navMenu) navMenu.classList.remove('active');
-        var hamburgerIcon = document.querySelector('.hamburger-icon');
-        var closeIcon = document.querySelector('.close-icon');
-        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
-        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
-        document.body.style.overflow = '';
+        // See initMobileLangSwitcher above for the rationale: navigate so the
+        // server-rendered chrome ends up in the chosen language and refresh
+        // stays consistent.
+        if (lang) navigateToLanguage(lang);
       });
     });
     
@@ -8247,76 +8265,6 @@ html[dir="rtl"] body {
           observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
         });
       }, 500);
-    })();
-    </script>
-
-    <script id="zappy-mobile-lang-menu-script">
-    (function() {
-      function initMobileLangMenu() {
-        if (window.innerWidth > 768) {
-          var existingMenu = document.querySelector('.mobile-lang-menu');
-          if (existingMenu) existingMenu.remove();
-          return;
-        }
-        if (document.querySelector('.mobile-lang-menu')) return;
-        var switcher = document.querySelector('.lang-switcher');
-        if (!switcher) return;
-        var dropdown = switcher.querySelector('.lang-switcher-dropdown');
-        if (!dropdown) return;
-        var options = dropdown.querySelectorAll('.lang-option');
-        if (options.length === 0) return;
-        var navMenu = document.getElementById('navMenu') || document.querySelector('.nav-menu') || document.querySelector('nav ul');
-        if (!navMenu) return;
-        var currentLang = document.documentElement.lang || 'en';
-        var langConfigs = {
-          he: {name:'עברית',flag:'https://api.iconify.design/circle-flags/il.svg'},
-          en: {name:'English',flag:'https://api.iconify.design/circle-flags/us.svg'},
-          ar: {name:'العربية',flag:'https://api.iconify.design/circle-flags/sa.svg'},
-          fr: {name:'Français',flag:'https://api.iconify.design/circle-flags/fr.svg'},
-          es: {name:'Español',flag:'https://api.iconify.design/circle-flags/es.svg'},
-          de: {name:'Deutsch',flag:'https://api.iconify.design/circle-flags/de.svg'},
-          ru: {name:'Русский',flag:'https://api.iconify.design/circle-flags/ru.svg'},
-          zh: {name:'中文',flag:'https://api.iconify.design/circle-flags/cn.svg'},
-          ja: {name:'日本語',flag:'https://api.iconify.design/circle-flags/jp.svg'},
-          pt: {name:'Português',flag:'https://api.iconify.design/circle-flags/br.svg'},
-          it: {name:'Italiano',flag:'https://api.iconify.design/circle-flags/it.svg'},
-          ko: {name:'한국어',flag:'https://api.iconify.design/circle-flags/kr.svg'}
-        };
-        var container = document.createElement('div');
-        container.className = 'mobile-lang-menu';
-        var currentConfig = langConfigs[currentLang] || {name:currentLang,flag:''};
-        var toggleBtn = document.createElement('button');
-        toggleBtn.className = 'mobile-lang-toggle';
-        toggleBtn.type = 'button';
-        var currentFlagHtml = currentConfig.flag ? '<img src="' + currentConfig.flag + '" width="20" height="20" alt="" style="border-radius:50%;margin-right:8px;margin-left:8px;">' : '';
-        toggleBtn.innerHTML = currentFlagHtml + currentConfig.name;
-        container.appendChild(toggleBtn);
-        var optionsDiv = document.createElement('div');
-        optionsDiv.className = 'mobile-lang-options';
-        var currentLink = document.createElement('a');
-        currentLink.className = 'mobile-lang-option active';
-        currentLink.href = '#';
-        currentLink.innerHTML = currentFlagHtml + currentConfig.name;
-        optionsDiv.appendChild(currentLink);
-        options.forEach(function(opt) {
-          var link = document.createElement('a');
-          link.className = 'mobile-lang-option';
-          link.href = opt.getAttribute('href');
-          link.innerHTML = opt.innerHTML;
-          optionsDiv.appendChild(link);
-        });
-        container.appendChild(optionsDiv);
-        navMenu.appendChild(container);
-        toggleBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          toggleBtn.classList.toggle('expanded');
-          optionsDiv.classList.toggle('expanded');
-        });
-      }
-      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileLangMenu); }
-      else { initMobileLangMenu(); }
-      window.addEventListener('resize', function() { clearTimeout(window._mlrt); window._mlrt = setTimeout(initMobileLangMenu, 250); });
     })();
     </script>
 
