@@ -15046,6 +15046,67 @@ form.contact-form .contact-input, form.contact-form .contact-textarea { width: 1
     position: fixed !important;top: var(--zappy-navbar-bottom, 70px) !important;right: var(--ios-viewport-gap, 0px) !important;}
 }
 
+
+/* ZAPPY_CART_DRAWER_DIR_OVERRIDE */
+/* Runtime-direction-aware cart drawer placement. Selectors target both
+   html[dir=...] and body[dir=...] so they apply regardless of which element
+   carries the dir attribute, and use #id + .class so they beat any baked
+   class="rtl" / class="ltr" on the aside itself (specificity 0,1,2,1 vs the
+   baked-class rule at 0,1,2,0; the !important on every property completes
+   the override). Generic for every site / language. */
+html[dir="ltr"] #cart-drawer.cart-drawer,
+body[dir="ltr"] #cart-drawer.cart-drawer,
+html[dir="ltr"] .cart-drawer,
+body[dir="ltr"] .cart-drawer {
+  right: 0 !important;
+  left: auto !important;
+  transform: translateX(100%) !important;
+  direction: ltr !important;
+}
+#cart-drawer.cart-drawer,
+body[dir="rtl"] #cart-drawer.cart-drawer,
+html[dir="rtl"] .cart-drawer,
+body[dir="rtl"] .cart-drawer{left: 0 !important;right: auto !important;transform: translateX(-100%) !important;}html[dir="rtl"] #cart-drawer.cart-drawer,
+body[dir="rtl"] #cart-drawer.cart-drawer,
+html[dir="rtl"] .cart-drawer,
+body[dir="rtl"] .cart-drawer{direction: rtl !important;}
+html[dir="ltr"] #cart-drawer.cart-drawer.active,
+body[dir="ltr"] #cart-drawer.cart-drawer.active,
+html[dir="ltr"] .cart-drawer.active,
+body[dir="ltr"] .cart-drawer.active,
+#cart-drawer.cart-drawer.active,
+body[dir="rtl"] #cart-drawer.cart-drawer.active,
+html[dir="rtl"] .cart-drawer.active,
+body[dir="rtl"] .cart-drawer.active{transform: translateX(0) !important;}
+
+
+/* ZAPPY_PRODUCTS_DROPDOWN_LTR_INDENT */
+/* LTR mirror of the [dir="rtl"] indentation block. Equal-or-higher
+   specificity than the shorthand .navbar .sub-menu li a override so the
+   nested sub-category items keep their visual indent on every LTR page —
+   English, Spanish, French, Russian, German, etc. The selectors target
+   dir="ltr" (the source of truth set on <html> by per-language page
+   generation), NOT a specific language code, so the rule stays generic
+   across every site / language combination. */
+[dir="ltr"] .sub-menu .zappy-nav-child > a,
+[dir="ltr"] .zappy-products-dropdown .zappy-nav-child > a,
+html[dir="ltr"] .sub-menu .zappy-nav-child > a,
+html[dir="ltr"] .zappy-products-dropdown .zappy-nav-child > a {
+  padding-left: 28px !important;
+  padding-right: 16px !important;
+  font-size: 0.9em !important;
+  opacity: 0.85 !important;
+}
+@media (max-width: 768px) {
+  [dir="ltr"] .navbar .zappy-products-dropdown > .sub-menu .zappy-nav-child > a,
+  [dir="ltr"] nav.navbar .zappy-products-dropdown > .sub-menu .zappy-nav-child > a,
+  html[dir="ltr"] .navbar .zappy-products-dropdown > .sub-menu .zappy-nav-child > a,
+  html[dir="ltr"] nav.navbar .zappy-products-dropdown > .sub-menu .zappy-nav-child > a {
+    padding-left: 36px !important;
+    padding-right: 16px !important;
+  }
+}
+
 /* Footer contact alignment fix */
 .footer-contact li > a { display: flex; align-items: flex-start; gap: inherit; }
 
