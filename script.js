@@ -9469,10 +9469,20 @@ async function loadRelatedProducts(currentProduct, t) {
 })();
 
 
-/* ZAPPY_ECOM_LANGUAGE_ROUTING_RUNTIME_V2 */
+/* ZAPPY_ECOM_LANGUAGE_ROUTING_RUNTIME_V4 */
 (function() {
   if (window.__zappyEcomLanguageRoutingRuntime) return;
   window.__zappyEcomLanguageRoutingRuntime = true;
+
+  // Routing strategy: use path-based language URLs for ALL storefront pages
+  // (including dynamic /product/:slug and /category/:slug). The publish
+  // pipeline pre-renders /<lang>/product/:slug/index.html with the correct
+  // navbar / catalog / lang-switcher baked in, and render.yaml rewrites
+  // /<lang>/product/* → that file. The script.js loaded inside is
+  // language-aware (reads the active language from the URL prefix) so dynamic
+  // labels (Add to Cart, In Stock, etc.) render in the right language too.
+  // This eliminates the source-language flash entirely — no runtime
+  // translation needed.
 
   function getPathLang() {
     return (window.location.pathname.match(/^\/([a-z]{2})(?:\/|$)/i) || [])[1];
@@ -9500,6 +9510,28 @@ async function loadRelatedProducts(currentProduct, t) {
     document.documentElement.setAttribute('dir', urlLang === 'he' || urlLang === 'ar' || urlLang === 'iw' ? 'rtl' : 'ltr');
   })();
 
+  // Backward-compat soft redirect: any in-flight bookmarks / external links of
+  // the form /product/<slug>?lang=en (issued by older builds) get rewritten
+  // immediately to the path-based equivalent /en/product/<slug>. Done before
+  // the rest of the runtime so the user lands on the correct pre-rendered HTML
+  // instead of seeing the source-language navbar flash. Skipped when we are
+  // already on a language-prefixed path (no redirect loop).
+  (function softRedirectQueryLangToPath() {
+    var queryLang = getQueryLang();
+    if (!queryLang) return;
+    var pathLang = getPathLang();
+    if (pathLang) return;
+    var path = window.location.pathname || '';
+    if (!/^\/(product|category)(?:\/|$)/i.test(path)) return;
+    try {
+      var url = new URL(window.location.href);
+      url.searchParams.delete('lang');
+      var nextPath = '/' + queryLang.toLowerCase() + path;
+      var nextHref = url.origin + nextPath + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '') + url.hash;
+      window.location.replace(nextHref);
+    } catch (e) {}
+  })();
+
   function getLang() {
     try {
       if (window.zappyI18n && typeof window.zappyI18n.getCurrentLanguage === 'function') {
@@ -9522,22 +9554,23 @@ async function loadRelatedProducts(currentProduct, t) {
     return htmlLang ? htmlLang.split('-')[0].toLowerCase() : '';
   }
 
+  function getDefaultLang() {
+    // The default language is whatever owns the path-prefix-free routes. We
+    // pin to 'he' here for the legacy Hebrew-source sites; future-proof by
+    // overriding via window.__zappyDefaultLang from the generated bundle.
+    return window.__zappyDefaultLang || 'he';
+  }
+
   function buildPath(path) {
     if (!path || /^https?:\/\//i.test(path) || path.charAt(0) === '#') return path;
     var normalized = path.charAt(0) === '/' ? path : '/' + path;
     var lang = getLang();
-    var defaultLang = 'he';
+    var defaultLang = getDefaultLang();
     if (!lang || lang === defaultLang) return normalized.replace(/^\/[a-z]{2}(?=\/)/i, '');
+    // Always use path-based language prefix — including dynamic
+    // /product/:slug + /category/:slug, which the publish pipeline serves via
+    // pre-rendered /<lang>/<base>/:slug/index.html. No more ?lang= query.
     var withoutLang = normalized.replace(/^\/[a-z]{2}(?=\/)/i, '');
-    if (/^\/(product|category)(?:\/|\?|#|$)/i.test(withoutLang)) {
-      var parts = withoutLang.split('#');
-      var hash = parts.length > 1 ? '#' + parts.slice(1).join('#') : '';
-      var pathAndQuery = parts[0].split('?');
-      var base = pathAndQuery[0];
-      var params = new URLSearchParams(pathAndQuery[1] || '');
-      params.set('lang', lang);
-      return base + '?' + params.toString() + hash;
-    }
     var prefix = '/' + lang;
     return withoutLang === prefix || withoutLang.indexOf(prefix + '/') === 0 ? withoutLang : prefix + withoutLang;
   }
@@ -9588,7 +9621,39 @@ async function loadRelatedProducts(currentProduct, t) {
     });
   }
 
+  // Inject the small CSS rules we need at runtime. Doing this from JS instead of
+  // a separate CSS ensure step makes us robust to clean-css comment stripping +
+  // declaration merging that was eating the standalone CSS injection.
+  function ensureRuntimeCssInjected() {
+    if (document.getElementById('zappy-ecom-routing-runtime-css')) return;
+    var style = document.createElement('style');
+    style.id = 'zappy-ecom-routing-runtime-css';
+    style.setAttribute('data-zappy-runtime', 'ecom-routing');
+    style.textContent =
+      '@media (min-width: 769px){' +
+        'html[dir="ltr"] .nav-container > .nav-brand,body[dir="ltr"] .nav-container > .nav-brand{order:-1!important}' +
+        'html[dir="ltr"] .nav-container > .nav-menu,body[dir="ltr"] .nav-container > .nav-menu{order:1!important;margin-inline-start:auto!important;margin-inline-end:24px!important;flex:0 1 auto!important}' +
+        'html[dir="ltr"] .nav-container > .lang-switcher,body[dir="ltr"] .nav-container > .lang-switcher,html[dir="ltr"] .nav-container > .nav-ecommerce-icons,body[dir="ltr"] .nav-container > .nav-ecommerce-icons{order:2!important}' +
+        'html[dir="ltr"] .nav-container > .nav-ecommerce-icons.nav-icons-left,body[dir="ltr"] .nav-container > .nav-ecommerce-icons.nav-icons-left{margin-inline-start:0!important}' +
+        'html[dir="ltr"] .zappy-products-dropdown > a .dropdown-arrow,body[dir="ltr"] .zappy-products-dropdown > a .dropdown-arrow{display:inline-block!important;flex:0 0 auto!important;margin-inline-start:6px!important}' +
+        'html[dir="ltr"] .zappy-catalog-menu,html[dir="ltr"] .zappy-catalog-menu .catalog-menu-container,html[dir="ltr"] .zappy-catalog-menu .catalog-menu-categories{direction:ltr!important}' +
+        'html[dir="ltr"] .zappy-catalog-menu .catalog-menu-container{align-items:flex-start!important}' +
+        'html[dir="ltr"] .zappy-catalog-menu .catalog-menu-categories{display:flex!important;align-items:flex-start!important;align-content:flex-start!important;row-gap:4px!important;column-gap:2px!important}' +
+        'html[dir="ltr"] .zappy-catalog-menu .catalog-menu-item{padding-inline:10px!important}' +
+        'html[dir="ltr"] .zappy-catalog-menu .catalog-menu-all{margin-top:0!important;align-self:flex-start!important}' +
+      '}' +
+      '@media (max-width:768px){' +
+        '.navbar .zappy-products-dropdown,nav.navbar .zappy-products-dropdown,.zappy-products-dropdown{position:relative!important}' +
+        '.navbar .zappy-products-dropdown > a,nav.navbar .zappy-products-dropdown > a,.zappy-products-dropdown > a{width:100%!important;min-width:0!important;padding-inline-end:56px!important;box-sizing:border-box!important}' +
+        'html[dir="rtl"] .navbar .zappy-products-dropdown > a,html[dir="rtl"] nav.navbar .zappy-products-dropdown > a,html[dir="rtl"] .zappy-products-dropdown > a{padding-inline-start:56px!important;padding-inline-end:16px!important}' +
+        '.navbar .zappy-products-dropdown > .mobile-submenu-toggle,nav.navbar .zappy-products-dropdown > .mobile-submenu-toggle,.zappy-products-dropdown > .mobile-submenu-toggle{display:flex!important;position:absolute!important;top:0!important;right:4px!important;left:auto!important;width:48px!important;height:44px!important;min-height:44px!important;align-items:center!important;justify-content:center!important;z-index:5!important;pointer-events:auto!important;margin:0!important;padding:0!important}' +
+        'html[dir="rtl"] .navbar .zappy-products-dropdown > .mobile-submenu-toggle,html[dir="rtl"] nav.navbar .zappy-products-dropdown > .mobile-submenu-toggle,html[dir="rtl"] .zappy-products-dropdown > .mobile-submenu-toggle{right:auto!important;left:4px!important}' +
+      '}';
+    (document.head || document.documentElement).appendChild(style);
+  }
+
   function patch() {
+    ensureRuntimeCssInjected();
     patchLinks(document);
     ensureProductsChevron();
     patchCatalogDirection();
