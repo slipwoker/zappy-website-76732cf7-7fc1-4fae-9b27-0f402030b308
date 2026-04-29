@@ -521,6 +521,8 @@ window.onload = function() {
 ;
 
 ;
+
+;
 /* ==ZAPPY E-COMMERCE JS START== */
 // E-commerce functionality
 (function() {
@@ -6182,8 +6184,10 @@ function renderCategoryPage(container, category, t) {
   const productGrid = document.getElementById('zappy-category-products');
   const isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
   
-  // Build breadcrumb
-  var productsLabel = (typeof additionalJsProductsMenuLabel === 'string' && additionalJsProductsMenuLabel) ? additionalJsProductsMenuLabel : t.products;
+  // Build breadcrumb (custom merchant label wins; otherwise resolve via getEcomText
+  // so the breadcrumb follows the active storefront language)
+  var customMenuLabel = (typeof additionalJsProductsMenuLabel === 'string' && additionalJsProductsMenuLabel) ? additionalJsProductsMenuLabel : null;
+  var productsLabel = customMenuLabel || getEcomText('products', t.products || 'Products');
   var breadcrumbHtml = '<nav class="product-breadcrumb">';
   breadcrumbHtml += '<a href="/">' + getEcomText('home', t.home || 'Home') + '</a>';
   breadcrumbHtml += '<span class="breadcrumb-separator">›</span>';
@@ -6692,8 +6696,10 @@ function renderProductDetail(container, product, t) {
     variantSelectorHtml = '<div class="product-variants" id="product-variants">' + groupsHtml + '</div>';
   }
   
-  // Build breadcrumb (use custom products label if set via store settings)
-  var productsLabel = (typeof additionalJsProductsMenuLabel === 'string' && additionalJsProductsMenuLabel) ? additionalJsProductsMenuLabel : t.products;
+  // Build breadcrumb (use custom products label if set via store settings, otherwise
+  // resolve via getEcomText so the breadcrumb follows the active storefront language)
+  var customMenuLabel = (typeof additionalJsProductsMenuLabel === 'string' && additionalJsProductsMenuLabel) ? additionalJsProductsMenuLabel : null;
+  var productsLabel = customMenuLabel || getEcomText('products', t.products || 'Products');
   var breadcrumbHtml = '<nav class="product-breadcrumb">';
   breadcrumbHtml += '<a href="/">' + getEcomText('home', t.home || 'Home') + '</a>';
   breadcrumbHtml += '<span class="breadcrumb-separator">›</span>';
@@ -6832,8 +6838,8 @@ function renderProductDetail(container, product, t) {
         ${variantSelectorHtml}
         <div class="product-stock ${baseInStock ? 'in-stock' : 'out-of-stock'}" id="product-stock-display">
           ${baseInStock 
-            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' + t.inStock
-            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' + t.outOfStock
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' + getEcomText('inStock', t.inStock || 'In Stock')
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' + getEcomText('outOfStock', t.outOfStock || 'Out of Stock')
           }
         </div>
         ${(() => {
@@ -6938,7 +6944,7 @@ function renderProductDetail(container, product, t) {
               </a>
             ` : `
             <button class="add-to-cart" id="add-to-cart-btn" onclick="addProductToCart()" ${!baseInStock ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>
-              ${t.addToCart}
+              ${getEcomText('addToCart', t.addToCart || 'Add to Cart')}
             </button>
             `}
           </div>
@@ -6947,7 +6953,7 @@ function renderProductDetail(container, product, t) {
         <div class="product-details-accordion">
           <div class="product-details-divider"></div>
           <button type="button" class="product-details-header" onclick="toggleProductDetails(this)">
-            <span>${t.productDetails || 'Product Details'}</span>
+            <span>${getEcomText('productDetails', t.productDetails || 'Product Details')}</span>
             <span class="product-details-toggle">−</span>
           </button>
           <div class="product-details-body">
@@ -6959,7 +6965,7 @@ function renderProductDetail(container, product, t) {
         <div class="product-details-accordion collapsed">
           <div class="product-details-divider"></div>
           <button type="button" class="product-details-header" onclick="toggleProductDetails(this)">
-            <span>${t.specifications || 'Specifications'}</span>
+            <span>${getEcomText('specifications', t.specifications || 'Specifications')}</span>
             <span class="product-details-toggle">+</span>
           </button>
           <div class="product-details-body">
@@ -6980,7 +6986,7 @@ function renderProductDetail(container, product, t) {
         <div class="product-details-accordion collapsed">
           <div class="product-details-divider"></div>
           <button type="button" class="product-details-header" onclick="toggleProductDetails(this)">
-            <span>${t.storeNote || 'Additional Information'}</span>
+            <span>${getEcomText('storeNote', t.storeNote || 'Additional Information')}</span>
             <span class="product-details-toggle">+</span>
           </button>
           <div class="product-details-body">
@@ -7606,8 +7612,8 @@ function updateVariantUI(variant, product, t, selectedAttributes) {
         stockDisplay.style.display = '';
         stockDisplay.className = 'product-stock ' + (variantInStock ? 'in-stock' : 'out-of-stock');
         stockDisplay.innerHTML = variantInStock 
-          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' + t.inStock
-          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' + t.outOfStock;
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' + getEcomText('inStock', t.inStock || 'In Stock')
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' + getEcomText('outOfStock', t.outOfStock || 'Out of Stock');
       }
     }
     
@@ -7667,7 +7673,7 @@ function updateVariantUI(variant, product, t, selectedAttributes) {
         else {
           stockDisplay.style.display = '';
           stockDisplay.className = 'product-stock out-of-stock';
-          stockDisplay.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' + (t.outOfStock || 'Out of Stock');
+          stockDisplay.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' + getEcomText('outOfStock', t.outOfStock || 'Out of Stock');
         }
       }
       
@@ -7696,8 +7702,8 @@ function updateVariantUI(variant, product, t, selectedAttributes) {
           stockDisplay.style.display = '';
           stockDisplay.className = 'product-stock ' + (baseInStock ? 'in-stock' : 'out-of-stock');
           stockDisplay.innerHTML = baseInStock 
-            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' + t.inStock
-            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' + t.outOfStock;
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' + getEcomText('inStock', t.inStock || 'In Stock')
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>' + getEcomText('outOfStock', t.outOfStock || 'Out of Stock');
         }
       }
       
