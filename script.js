@@ -9437,17 +9437,18 @@ async function loadRelatedProducts(currentProduct, t) {
         var gap = Math.max(0, (visual || 0) - (layout || 0));
         document.documentElement.style.setProperty('--ios-viewport-gap', gap + 'px');
 
-        // Also publish the navbar height so the mobile dropdown menu CSS can
-        // anchor `top` to the navbar's bottom edge. This is needed because
+        // Also publish the navbar bottom so the mobile dropdown menu CSS can
+        // anchor `top` below announcement bars + fixed navbar. This is needed because
         // older v2 patches set `top: 100% !important` on .nav-menu, which
         // with position:fixed resolves against the viewport (=height of
         // screen) instead of the navbar. --zappy-navbar-bottom gives the
         // v3 CSS something concrete to override that with.
         var nav = document.querySelector('nav.navbar, .navbar, header nav, header.navbar');
         if (nav) {
-          var h = Math.round(nav.getBoundingClientRect().height);
-          if (h > 0) {
-            document.documentElement.style.setProperty('--zappy-navbar-bottom', h + 'px');
+          var rect = nav.getBoundingClientRect();
+          var bottom = Math.round(rect.bottom);
+          if (bottom > 0) {
+            document.documentElement.style.setProperty('--zappy-navbar-bottom', bottom + 'px');
           }
         }
       } catch (e) {}
