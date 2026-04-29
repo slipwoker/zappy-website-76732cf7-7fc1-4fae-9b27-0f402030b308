@@ -1,6 +1,4 @@
-# ארטאורי דיזיין — Generative Engine Optimization Map
-
-> A home decor e-commerce brand specializing in handcrafted, designer products organized by both function and theme. The brand features a unique dual-categorization approach with functional items (bookends, bookshelves, bookmarks, phone stands, paper towel holders, toilet paper storage shelves, and hangers) and thematic collections centered around superheroes and cats. This creative fusion brings personality and storytelling to everyday household items, appealing to customers who want functional pieces that express their interests and passions.
+# Business — Generative Engine Optimization Map
 
 ---
 
@@ -72,18 +70,7 @@ Information about WCAG compliance and accessibility features.
 
 # Business Context (for LLM understanding)
 
-## About ארטאורי דיזיין
-A home decor e-commerce brand specializing in handcrafted, designer products organized by both function and theme. The brand features a unique dual-categorization approach with functional items (bookends, bookshelves, bookmarks, phone stands, paper towel holders, toilet paper storage shelves, and hangers) and thematic collections centered around superheroes and cats. This creative fusion brings personality and storytelling to everyday household items, appealing to customers who want functional pieces that express their interests and passions.
-
-## Target Audience
-- חובבי עיצוב צעירים
-- בעלי בתים עירוניים
-- מעצבי פנים
-- בעלי בתים ראשונים
-
-## Industry
-עיצוב ומוצרי בית
-
+## About Business
 ---
 
 # Additional Resources
