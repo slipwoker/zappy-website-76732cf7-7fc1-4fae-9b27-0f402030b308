@@ -6834,7 +6834,7 @@ function renderProductDetail(container, product, t) {
         })()}
         ` : ''}
         ${product.short_description ? '<div class="product-short-description">' + product.short_description + '</div>' : ''}
-        ${product.sku ? '<div class="product-sku" id="product-sku-display">' + t.sku + ': ' + product.sku + '</div>' : ''}
+        ${product.sku ? '<div class="product-sku" id="product-sku-display">' + (typeof getEcomText === 'function' ? getEcomText('sku', t.sku || 'SKU') : (t.sku || 'SKU')) + ': ' + product.sku + '</div>' : ''}
         ${variantSelectorHtml}
         <div class="product-stock ${baseInStock ? 'in-stock' : 'out-of-stock'}" id="product-stock-display">
           ${baseInStock 
