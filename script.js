@@ -9467,3 +9467,133 @@ async function loadRelatedProducts(currentProduct, t) {
     setTimeout(update, 1000);
   } catch (e) {}
 })();
+
+
+/* ZAPPY_ECOM_LANGUAGE_ROUTING_RUNTIME */
+(function() {
+  if (window.__zappyEcomLanguageRoutingRuntime) return;
+  window.__zappyEcomLanguageRoutingRuntime = true;
+
+  function getPathLang() {
+    return (window.location.pathname.match(/^\/([a-z]{2})(?:\/|$)/i) || [])[1];
+  }
+
+  (function seedLanguageFromPath() {
+    var pathLang = getPathLang();
+    if (!pathLang) return;
+    pathLang = pathLang.toLowerCase();
+    try {
+      localStorage.setItem('zappy_lang', pathLang);
+      localStorage.setItem('zappy-language', pathLang);
+      localStorage.setItem('selectedLanguage', pathLang);
+      localStorage.setItem('language', pathLang);
+    } catch (e) {}
+    document.documentElement.setAttribute('lang', pathLang);
+    document.documentElement.setAttribute('dir', pathLang === 'he' || pathLang === 'ar' || pathLang === 'iw' ? 'rtl' : 'ltr');
+  })();
+
+  function getLang() {
+    try {
+      if (window.zappyI18n && typeof window.zappyI18n.getCurrentLanguage === 'function') {
+        var i18nLang = window.zappyI18n.getCurrentLanguage();
+        if (i18nLang) return String(i18nLang).split('-')[0].toLowerCase();
+      }
+      if (window.zappyI18n && window.zappyI18n.language) {
+        return String(window.zappyI18n.language).split('-')[0].toLowerCase();
+      }
+    } catch (e) {}
+    try {
+      var stored = localStorage.getItem('zappy_lang') || localStorage.getItem('zappy-language') || localStorage.getItem('selectedLanguage') || localStorage.getItem('language');
+      if (stored) return String(stored).split('-')[0].toLowerCase();
+    } catch (e) {}
+    var pathLang = getPathLang();
+    if (pathLang) return pathLang.toLowerCase();
+    var htmlLang = document.documentElement.getAttribute('lang');
+    return htmlLang ? htmlLang.split('-')[0].toLowerCase() : '';
+  }
+
+  function buildPath(path) {
+    if (!path || /^https?:\/\//i.test(path) || path.charAt(0) === '#') return path;
+    var normalized = path.charAt(0) === '/' ? path : '/' + path;
+    var lang = getLang();
+    var defaultLang = 'he';
+    if (!lang || lang === defaultLang) return normalized.replace(/^\/[a-z]{2}(?=\/)/i, '');
+    var prefix = '/' + lang;
+    var withoutLang = normalized.replace(/^\/[a-z]{2}(?=\/)/i, '');
+    return withoutLang === prefix || withoutLang.indexOf(prefix + '/') === 0 ? withoutLang : prefix + withoutLang;
+  }
+
+  function isStorefrontPath(href) {
+    return /^\/(?:[a-z]{2}\/)?(?:product|category|products)(?:\/|\?|#|$)/i.test(href || '');
+  }
+
+  function patchLinks(root) {
+    var scope = root && root.querySelectorAll ? root : document;
+    scope.querySelectorAll('a[href]').forEach(function(anchor) {
+      var href = anchor.getAttribute('href');
+      if (!isStorefrontPath(href)) return;
+      var next = buildPath(href);
+      if (href !== next) anchor.setAttribute('href', next);
+    });
+  }
+
+  function ensureProductsChevron() {
+    var trigger = document.querySelector('.zappy-products-dropdown > a');
+    if (!trigger) return;
+    trigger.setAttribute('href', buildPath('/products'));
+    if (trigger.querySelector('svg.dropdown-arrow')) return;
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'dropdown-arrow');
+    svg.setAttribute('width', '12');
+    svg.setAttribute('height', '12');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M6 9l6 6 6-6');
+    svg.appendChild(path);
+    trigger.appendChild(document.createTextNode(' '));
+    trigger.appendChild(svg);
+  }
+
+  function patchCatalogDirection() {
+    var catalog = document.getElementById('zappy-catalog-menu');
+    if (!catalog) return;
+    var dir = document.documentElement.getAttribute('dir') || (getLang() === 'he' ? 'rtl' : 'ltr');
+    catalog.classList.toggle('rtl', dir === 'rtl');
+    catalog.classList.toggle('ltr', dir !== 'rtl');
+    catalog.setAttribute('dir', dir);
+    catalog.querySelectorAll('.catalog-menu-item, .sub-menu').forEach(function(el) {
+      el.setAttribute('dir', dir);
+    });
+  }
+
+  function patch() {
+    patchLinks(document);
+    ensureProductsChevron();
+    patchCatalogDirection();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', patch);
+  } else {
+    patch();
+  }
+  window.addEventListener('popstate', function() { setTimeout(patch, 0); });
+  window.addEventListener('zappy:languageChanged', function() { setTimeout(patch, 0); });
+  window.addEventListener('languageChanged', function() { setTimeout(patch, 0); });
+  new MutationObserver(function(mutations) {
+    var shouldPatch = mutations.some(function(mutation) {
+      return Array.prototype.some.call(mutation.addedNodes || [], function(node) {
+        return node.nodeType === 1 && (
+          (node.matches && node.matches('a[href], .zappy-products-dropdown, #zappy-catalog-menu')) ||
+          (node.querySelector && node.querySelector('a[href], .zappy-products-dropdown, #zappy-catalog-menu'))
+        );
+      });
+    });
+    if (shouldPatch) setTimeout(patch, 0);
+  }).observe(document.documentElement, { childList: true, subtree: true });
+  setTimeout(patch, 250);
+  setTimeout(patch, 1500);
+})();
