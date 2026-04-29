@@ -7101,14 +7101,30 @@ html[dir="rtl"] body {
   // Language display info with SVG flag images for cross-platform compatibility
   const languageInfo = {"he":{"name":"Hebrew","nativeName":"עברית","flag":"🇮🇱","flagIcon":"circle-flags:il","dir":"rtl","flagImg":"<img src=\"https://api.iconify.design/circle-flags/il.svg\" width=\"20\" height=\"20\" alt=\"\" style=\"display:inline-block;vertical-align:middle;border-radius:50%;\" />"},"en":{"name":"English","nativeName":"English","flag":"🇺🇸","flagIcon":"circle-flags:us","dir":"ltr","flagImg":"<img src=\"https://api.iconify.design/circle-flags/us.svg\" width=\"20\" height=\"20\" alt=\"\" style=\"display:inline-block;vertical-align:middle;border-radius:50%;\" />"}};
   
-  // Detect stored language preference - only use stored value, not browser language
-  // This ensures the site respects its original design (e.g., RTL Hebrew site stays RTL by default)
+  // Detect the active language. URL is the source of truth: a /<lang>/... path
+  // or ?lang=<x> query unambiguously says which language the user is viewing,
+  // and stored preference must NOT win over it (or visiting /en/... while
+  // localStorage holds 'he' from a previous Hebrew session keeps the cart
+  // drawer / product detail / checkout strings rendering in Hebrew).
+  // Stored preference is only consulted when no URL signal exists, falling
+  // back to the site default last.
   function detectLanguage() {
-    const stored = localStorage.getItem('zappy_lang');
+    try {
+      var pathLang = (window.location.pathname.match(/^\/([a-z]{2})(?:\/|$)/i) || [])[1];
+      if (pathLang && availableLanguages.includes(pathLang.toLowerCase())) {
+        var resolvedPathLang = pathLang.toLowerCase();
+        try { localStorage.setItem('zappy_lang', resolvedPathLang); } catch (e) {}
+        return resolvedPathLang;
+      }
+      var queryLang = new URLSearchParams(window.location.search).get('lang');
+      if (queryLang && availableLanguages.includes(queryLang.toLowerCase())) {
+        var resolvedQueryLang = queryLang.toLowerCase();
+        try { localStorage.setItem('zappy_lang', resolvedQueryLang); } catch (e) {}
+        return resolvedQueryLang;
+      }
+    } catch (e) {}
+    var stored = localStorage.getItem('zappy_lang');
     if (stored && availableLanguages.includes(stored)) return stored;
-    
-    // Always default to the site's default language, not browser language
-    // This prevents breaking the original site layout on first visit
     return 'he';
   }
   
