@@ -9469,7 +9469,7 @@ async function loadRelatedProducts(currentProduct, t) {
 })();
 
 
-/* ZAPPY_ECOM_LANGUAGE_ROUTING_RUNTIME_V4 */
+/* ZAPPY_ECOM_LANGUAGE_ROUTING_RUNTIME_V5 */
 (function() {
   if (window.__zappyEcomLanguageRoutingRuntime) return;
   window.__zappyEcomLanguageRoutingRuntime = true;
@@ -9609,6 +9609,87 @@ async function loadRelatedProducts(currentProduct, t) {
     trigger.appendChild(svg);
   }
 
+  // On mobile the inline chevron (rendered inside the <a>) is unusable: tapping
+  // it just navigates to /products instead of expanding the submenu, and it sits
+  // hugged to the link text instead of on the far side of the row. The
+  // generation pipelines for e-commerce per-language pages do not inject the
+  // shared initMobileSubmenuToggles helper, so we own that here. Below 768px
+  // we materialise a dedicated <button class="mobile-submenu-toggle"> as a
+  // sibling of the link; existing styles.css already styles its chevron and
+  // expands .sub-menu.mobile-expanded, and our V5 ensureRuntimeCssInjected
+  // pins the button to the far edge of the row (right in LTR, left in RTL).
+  // Above 768px we tear it back down so the desktop hover dropdown is intact.
+  function ensureMobileSubmenuToggles() {
+    var isMobile = window.matchMedia ? window.matchMedia('(max-width: 768px)').matches : window.innerWidth <= 768;
+
+    if (!isMobile) {
+      document.querySelectorAll('.mobile-submenu-toggle[data-zappy-runtime="ecom-routing"]').forEach(function(btn) {
+        btn.remove();
+      });
+      document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+        menu.classList.remove('mobile-expanded');
+      });
+      document.querySelectorAll('.zappy-products-dropdown > a > svg.dropdown-arrow[data-zappy-mobile-hidden="1"]').forEach(function(arrow) {
+        arrow.style.display = '';
+        arrow.removeAttribute('data-zappy-mobile-hidden');
+      });
+      return;
+    }
+
+    var dropdowns = document.querySelectorAll('.zappy-products-dropdown, .menu-item-has-children, .nav-menu li:has(> .sub-menu), nav li:has(> .sub-menu)');
+    dropdowns.forEach(function(li) {
+      if (!li || !li.querySelector) return;
+      var submenu = li.querySelector(':scope > .sub-menu');
+      var trigger = li.querySelector(':scope > a');
+      if (!submenu || !trigger) return;
+      if (li.querySelector(':scope > .mobile-submenu-toggle')) return;
+
+      // Hide the inline SVG chevron on mobile so we don't render two chevrons.
+      var inlineArrow = trigger.querySelector('svg.dropdown-arrow');
+      if (inlineArrow && !inlineArrow.hasAttribute('data-zappy-mobile-hidden')) {
+        inlineArrow.style.display = 'none';
+        inlineArrow.setAttribute('data-zappy-mobile-hidden', '1');
+      }
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mobile-submenu-toggle';
+      btn.setAttribute('aria-label', 'Toggle submenu');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('data-zappy-runtime', 'ecom-routing');
+
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+
+        // Close any other open submenus so only one is open at a time.
+        document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(other) {
+          if (other === submenu) return;
+          other.classList.remove('mobile-expanded');
+          var otherBtn = other.parentElement && other.parentElement.querySelector(':scope > .mobile-submenu-toggle');
+          if (otherBtn) {
+            otherBtn.classList.remove('expanded');
+            otherBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        var willOpen = !submenu.classList.contains('mobile-expanded');
+        submenu.classList.toggle('mobile-expanded', willOpen);
+        btn.classList.toggle('expanded', willOpen);
+        btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      }, true);
+
+      trigger.insertAdjacentElement('afterend', btn);
+    });
+  }
+
+  var __zappyMobileSubmenuResizeTimer = null;
+  window.addEventListener('resize', function() {
+    if (__zappyMobileSubmenuResizeTimer) clearTimeout(__zappyMobileSubmenuResizeTimer);
+    __zappyMobileSubmenuResizeTimer = setTimeout(ensureMobileSubmenuToggles, 200);
+  }, { passive: true });
+
   function patchCatalogDirection() {
     var catalog = document.getElementById('zappy-catalog-menu');
     if (!catalog) return;
@@ -9656,6 +9737,7 @@ async function loadRelatedProducts(currentProduct, t) {
     ensureRuntimeCssInjected();
     patchLinks(document);
     ensureProductsChevron();
+    ensureMobileSubmenuToggles();
     patchCatalogDirection();
   }
 
