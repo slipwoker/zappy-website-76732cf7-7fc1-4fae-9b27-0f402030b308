@@ -15162,6 +15162,7 @@ html[dir="ltr"] .zappy-products-dropdown .zappy-nav-child > a {
    - *-content-column              → split / two-column section bodies
    - *-info-item / .suggestion-item → contact-form widgets
    - .order-success-card           → checkout success card
+   - .privacy-consent-label        → contact-form consent checkbox row
    - .text-left                    → AI sometimes literally writes
                                      ".text-left { text-align: right }" in
                                      Hebrew sites — flip it so the class
@@ -15180,6 +15181,14 @@ html[dir="ltr"] .order-success-card {
 }
 
 html[dir="ltr"] .text-left {
+  text-align: left !important;
+}
+
+/* Consent labels are often baked with direction: rtl so the checkbox renders
+   on the right. In LTR the checkbox is the first DOM child and should render
+   on the left, before the translated agreement text. */
+html[dir="ltr"] .privacy-consent-label {
+  direction: ltr !important;
   text-align: left !important;
 }
 
