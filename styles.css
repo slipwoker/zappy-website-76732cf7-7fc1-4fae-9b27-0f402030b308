@@ -15160,6 +15160,7 @@ html[dir="ltr"] .zappy-products-dropdown .zappy-nav-child > a {
    Patterns covered:
    - *-card-content / *-card-text  → e-commerce + collections card bodies
    - *-content-column              → split / two-column section bodies
+   - contact form grid/card blocks → contact form two-column sections
    - *-info-item / .suggestion-item → contact-form widgets
    - .order-success-card           → checkout success card
    - .privacy-consent-label        → contact-form consent checkbox row
@@ -15181,6 +15182,18 @@ html[dir="ltr"] .order-success-card {
 }
 
 html[dir="ltr"] .text-left {
+  text-align: left !important;
+}
+
+/* Contact form columns/cards are often baked with direction: rtl. In LTR this
+   reverses the grid column placement and moves punctuation to the wrong side
+   of headings (e.g. "?What should you tell us"). */
+html[dir="ltr"] .contact-form-grid,
+html[dir="ltr"] .contact-form-container,
+html[dir="ltr"] .form-card,
+html[dir="ltr"] .reassurance-card,
+html[dir="ltr"] .suggestion-list {
+  direction: ltr !important;
   text-align: left !important;
 }
 
