@@ -15197,6 +15197,13 @@ html[dir="ltr"] .suggestion-list {
   text-align: left !important;
 }
 
+html[dir="ltr"] .suggestion-item,
+html[dir="ltr"] .contact-info-item {
+  direction: ltr !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
 /* Consent labels are often baked with direction: rtl so the checkbox renders
    on the right. In LTR the checkbox is the first DOM child and should render
    on the left, before the translated agreement text. */
