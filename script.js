@@ -11261,10 +11261,10 @@ async function loadRelatedProducts(currentProduct, t) {
 })();
 
 
-/* ZAPPY_ECOM_LANGUAGE_ROUTING_RUNTIME_V15 */
+/* ZAPPY_ECOM_LANGUAGE_ROUTING_RUNTIME_V16 */
 (function() {
-  if (window.__zappyEcomLanguageRoutingRuntime >= 15) return;
-  window.__zappyEcomLanguageRoutingRuntime = 15;
+  if (window.__zappyEcomLanguageRoutingRuntime >= 16) return;
+  window.__zappyEcomLanguageRoutingRuntime = 16;
 
   // Routing strategy: use path-based language URLs for ALL storefront pages
   // (including dynamic /product/:slug and /category/:slug). The publish
@@ -11578,6 +11578,7 @@ async function loadRelatedProducts(currentProduct, t) {
       }
 
       submenu.querySelectorAll('a, .menu-group-title').forEach(function(item) {
+        var parentItem = item.closest && item.closest('li');
         setImportant(item, 'display', 'block');
         setImportant(item, 'direction', isRtl ? 'rtl' : 'ltr');
         setImportant(item, 'width', '100%');
@@ -11588,6 +11589,15 @@ async function loadRelatedProducts(currentProduct, t) {
         setImportant(item, 'overflow-wrap', 'anywhere');
         setImportant(item, 'padding', '10px 8px');
         setImportant(item, 'text-align', isRtl ? 'right' : 'left');
+        if (parentItem && parentItem.classList && parentItem.classList.contains('zappy-nav-parent')) {
+          setImportant(item, 'font-weight', '700');
+        }
+        if (parentItem && parentItem.classList && parentItem.classList.contains('zappy-nav-child')) {
+          setImportant(item, 'padding-left', isRtl ? '16px' : '36px');
+          setImportant(item, 'padding-right', isRtl ? '36px' : '16px');
+          setImportant(item, 'font-size', '0.94em');
+          setImportant(item, 'opacity', '0.85');
+        }
       });
     });
   }
@@ -11661,12 +11671,12 @@ async function loadRelatedProducts(currentProduct, t) {
   // declaration merging that was eating the standalone CSS injection.
   function ensureRuntimeCssInjected() {
     var existing = document.getElementById('zappy-ecom-routing-runtime-css');
-    if (existing && existing.getAttribute('data-v') === '15') return;
+    if (existing && existing.getAttribute('data-v') === '16') return;
     if (existing) existing.remove();
     var style = document.createElement('style');
     style.id = 'zappy-ecom-routing-runtime-css';
     style.setAttribute('data-zappy-runtime', 'ecom-routing');
-    style.setAttribute('data-v', '15');
+    style.setAttribute('data-v', '16');
     style.textContent =
       '@media (min-width: 769px){' +
         'html[dir="ltr"] .nav-container > .nav-brand,body[dir="ltr"] .nav-container > .nav-brand{order:-1!important}' +
@@ -11691,6 +11701,9 @@ async function loadRelatedProducts(currentProduct, t) {
         '.nav-menu li:has(.sub-menu)>.sub-menu,.navbar li:has(.sub-menu)>.sub-menu,nav li:has(.sub-menu)>.sub-menu{order:3!important;flex:0 0 100%!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;margin:0!important;transform:none!important;left:auto!important;right:auto!important;inset-inline-start:auto!important;inset-inline-end:auto!important}' +
         '.nav-menu .sub-menu.mobile-expanded,.navbar .sub-menu.mobile-expanded,nav .sub-menu.mobile-expanded{padding:8px 0!important}' +
         '.sub-menu a,.sub-menu .menu-group-title{display:block!important;width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;padding:10px 8px!important}' +
+        '.zappy-products-dropdown>.sub-menu .zappy-nav-parent>a,.zappy-products-dropdown>.sub-menu .zappy-nav-parent>.menu-group-title{font-weight:700!important}' +
+        '.zappy-products-dropdown>.sub-menu .zappy-nav-child>a,.zappy-products-dropdown>.sub-menu .zappy-nav-child>.menu-group-title{padding-left:36px!important;padding-right:16px!important;font-size:.94em!important;opacity:.85!important}' +
+        'html[dir="rtl"] .zappy-products-dropdown>.sub-menu .zappy-nav-child>a,body[dir="rtl"] .zappy-products-dropdown>.sub-menu .zappy-nav-child>a,html[dir="rtl"] .zappy-products-dropdown>.sub-menu .zappy-nav-child>.menu-group-title,body[dir="rtl"] .zappy-products-dropdown>.sub-menu .zappy-nav-child>.menu-group-title{padding-left:16px!important;padding-right:36px!important}' +
       '}';
     (document.head || document.documentElement).appendChild(style);
   }
