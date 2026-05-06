@@ -5271,7 +5271,7 @@ html[dir="rtl"] body {
       "cart_link_23": "המשך לתשלום",
       "checkout_p_7": "פריטי עיצוב הבית ומתנות עם אופי שמכניסים חום, ענין והומור לכל חלל מגורים",
       "checkout_p_8": "© 2026 ארטאורי דיזיין. כל הזכויות שמורות.",
-      "contact_h1_1": "ארטאורי דיזיין",
+      "contact_h1_1": "עידו סלע",
       "contact_h2_2": "שלחו לנו הודעה",
       "contact_h2_3": "צור קשר ישיר",
       "contact_h2_4": "היכן אנחנו פועלים",
@@ -5280,7 +5280,7 @@ html[dir="rtl"] body {
       "contact_h3_7": "הדרכה ברורה להתקנה",
       "contact_h3_8": "מענה אנושי וידידותי",
       "contact_h3_9": "מה כדאי לספר לנו?",
-      "contact_p_18": "שתפו אותנו במה אתם צריכים (פונקציה) ומה אתם אוהבים (נושא), ואנחנו נעזור לכם למצוא את המוצר המעוצב שישתלב בצורה מושלמת בבית שלכם. בין אם אתם מחפשים תומכי ספרים מעוצבים לבית, מעמדי טלפון ייחודיים או אביזרים למטבח בעיצוב מיוחד – אנחנו כאן בשבילכם.",
+      "contact_p_18": "שלום שלום שלםו",
       "contact_p_19": "נציע לכם במדויק את המוצר שמתאים לסגנון ולצרכים שלכם, בין אם זה פונקציה שאתם רוצים למלא או חלל שאתם רוצים לעצב.",
       "contact_p_20": "כל מוצר מגיע עם הוראות התקנה פשוטות וברורות, כך שתוכלו ליהנות מהפריט החדש שלכם בקלות ובביטחון.",
       "contact_p_21": "אנחנו כאן כדי לענות על כל שאלה, להמליץ על מתנות מיוחדות, ולוודא שתקבלו שירות אישי וחם.",
@@ -6897,7 +6897,7 @@ html[dir="rtl"] body {
       "cart_link_23": "Proceed to Checkout",
       "checkout_p_7": "Home design items and gifts with character that bring warmth, interest and humor to any living space",
       "checkout_p_8": "© 2026 Artori Design. All rights reserved.",
-      "contact_h1_1": "Artori Design",
+      "contact_h1_1": "Eden Malka",
       "contact_h2_2": "Send Us a Message",
       "contact_h2_3": "Direct Contact",
       "contact_h2_4": "Where We Operate",
@@ -8404,9 +8404,18 @@ html[dir="rtl"] body {
         }
       }
 
-      // Pure text element (or wrapper like <font>text</font>) — use innerHTML
-      // when the translation or existing markup contains line breaks / inline
-      // formatting so <br> and inline tags survive the swap.
+      // Carry over inline formatting from the source element when the translation
+      // is plain text. E.g., source: <font color="#fff">Hebrew</font>,
+      // translation: "English" → wrap as <font color="#fff">English</font>.
+      var fontChild = el.querySelector('font[color], font[face], font[size]');
+      if (fontChild && !inlineFormatPattern.test(translation)) {
+        var fontTag = '<font';
+        for (var ai = 0; ai < fontChild.attributes.length; ai++) {
+          fontTag += ' ' + fontChild.attributes[ai].name + '="' + fontChild.attributes[ai].value.replace(/"/g, '&quot;') + '"';
+        }
+        translation = fontTag + '>' + translation + '</font>';
+      }
+
       var hasNewlines = translation.indexOf(newlineChar) !== -1;
       var hasInlineFormat = inlineFormatPattern.test(translation);
       var hasEntities = /&[a-zA-Z]+;|&#\d+;|&#x[0-9a-fA-F]+;/.test(translation);
@@ -8427,7 +8436,7 @@ html[dir="rtl"] body {
         el.setAttribute('placeholder', translation);
       }
     });
-    
+
     // Update alt attributes
     document.querySelectorAll('[data-i18n-alt]').forEach(function(el) {
       const key = el.getAttribute('data-i18n-alt');
@@ -8436,7 +8445,7 @@ html[dir="rtl"] body {
         el.setAttribute('alt', translation);
       }
     });
-    
+
     // Update title attributes
     document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
       const key = el.getAttribute('data-i18n-title');
@@ -8445,7 +8454,7 @@ html[dir="rtl"] body {
         el.setAttribute('title', translation);
       }
     });
-    
+
     // Update meta description / og:* / twitter:* / keywords / author
     document.querySelectorAll('[data-i18n-content]').forEach(function(el) {
       const key = el.getAttribute('data-i18n-content');
