@@ -72,7 +72,14 @@ Information about WCAG compliance and accessibility features.
 
 ## Products
 
-**Total active products: 120**
+**Total active products: 121**
+
+### טלפון של עידו
+https://arturi-design.zappy5.app/product/tlpvn-shl-aydv-p8whxe
+- Price: 990.00 ILS (sale, was 1500.00 ILS)
+- Availability: In stock
+- Category: XXX טסט של עידו
+- Image: https://arturi-design.zappy5.app/assets/image-product-image-1778067706586-zajf2s.webp
 
 ### ספה טסט של עידו
 https://arturi-design.zappy5.app/product/sph-tst-shl-aydv-zn88i0

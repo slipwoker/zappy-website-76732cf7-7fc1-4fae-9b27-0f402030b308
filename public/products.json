@@ -1,10 +1,37 @@
 {
   "@context": "https://schema.org",
-  "generated_at": "2026-05-06T11:40:27.746Z",
+  "generated_at": "2026-05-06T11:42:53.658Z",
   "base_url": "https://arturi-design.zappy5.app",
   "currency": "ILS",
-  "count": 120,
+  "count": 121,
   "products": [
+    {
+      "id": "d57ef3dd-d2e9-4bee-8c72-7fc2946205c6",
+      "slug": "tlpvn-shl-aydv-p8whxe",
+      "name": "טלפון של עידו",
+      "name_translations": {
+        "en": "Ido's Phone",
+        "he": "טלפון של עידו"
+      },
+      "description": "",
+      "short_description": null,
+      "sku": null,
+      "brand": null,
+      "price": 990,
+      "base_price": 1500,
+      "sale_price": 990,
+      "currency": "ILS",
+      "images": [
+        "https://arturi-design.zappy5.app/assets/image-product-image-1778067706586-zajf2s.webp"
+      ],
+      "in_stock": true,
+      "stock_status": "in_stock",
+      "url": "https://arturi-design.zappy5.app/product/tlpvn-shl-aydv-p8whxe",
+      "categories": [
+        "XXX טסט של עידו"
+      ],
+      "updated_at": "2026-05-06T11:42:08.187Z"
+    },
     {
       "id": "348cf54f-cb9e-42ea-b43a-598bcb197ba5",
       "slug": "sph-tst-shl-aydv-zn88i0",
